@@ -1,7 +1,7 @@
 # pcapVis
 PCAP Force-Directed Graph Generators
-Requires Python 2.6+, GraphViz, and TShark
-- to install the requirements: <b>sudo apt-get install graphviz tshark -y</b>
+- Requires Python 2.6+, GraphViz, and TShark
+- Install Requirements: <b>sudo apt-get install graphviz tshark -y</b>
 
 <b>pcapVis-connections.py</b>
 Produces a basic force-directed link graph that also highlights SSH connections
