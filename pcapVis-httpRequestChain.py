@@ -21,6 +21,7 @@ listy = []
 dicty = {}
 
 def makeGraph():
+	print 'Generating graph.  This may take a few seconds...'
 	for line in os.popen(command):
 		l = line.strip('\n').replace('http://', '').replace('https://','').split(',')
 		sip = str(l[0])
