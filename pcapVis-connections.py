@@ -96,6 +96,7 @@ def makeGraph():
 
 	# use the dot file to create the graph
 	os.popen('dot -Tpng %s -o %s' % (dotFile, dotOutputFile))
+	print 'Made %s' % (dotOutputFile)
 #	os.popen('circo -Tpng %s -o %s' % (dotFile, circoOutputFile))
 #	os.popen('neato -Goverlap=scale -Tpng %s -o %s' % (dotFile, neatoOutputFile))
 	os.remove(dotFile) # remove dot file
