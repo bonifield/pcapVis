@@ -26,7 +26,7 @@ command = 'tshark -r %s -T fields -e ip.proto -e ip.src -e ip.dst -e http.host -
 #====================
 
 def makeGraph():
-	print('Generating graph.  This may take a few seconds...')
+	print 'Generating graph.  This may take a few seconds...'
 	for line in os.popen(command):
 		l = line.split(',')
 		k = ''
