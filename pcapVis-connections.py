@@ -86,7 +86,7 @@ def makeGraph():
 		d.write('\n\n')
 		if dicty:
 			for key in dicty.keys(): # for each key (which is an IP to be labeled)
-				d.write(str('"{}" [ label = "'.format(key))) # open the label bracket for that IP
+				d.write(str('"%s" [ label = "' % (key))) # open the label bracket for that IP
 				d.write('IP:  '+key)
 				for val in dicty[key]: # iterate over the values for the key (the labels to be added to the node)
 					d.write(r'\n'+val) # write the label
