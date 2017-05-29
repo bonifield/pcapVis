@@ -7,7 +7,7 @@
 # 19 May 2017
 #=============
 
-import sys, os
+import os, sys
 
 inputFile = sys.argv[1]
 dotFile = str(inputFile+'-chain.dot')
