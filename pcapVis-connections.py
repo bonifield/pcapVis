@@ -10,7 +10,7 @@
 # TODO - color legend
 #====================
 
-import sys, os
+import os, sys
 
 #====================
 
@@ -19,13 +19,13 @@ dotFile = str(inputFile+'-conns.dot')
 dotOutputFile = str(inputFile+'-conns-dot.png')
 circoOutputFile = str(inputFile+'-conns-circo.png')
 neatoOutputFile = str(inputFile+'-conns-neato.png')
-command = 'tshark -r %s -T fields -e ip.proto -e ip.src -e ip.dst -e http.host -e http.request.method -e http.response.code -e http.response.phrase -e ssl.handshake.extensions_server_name -e ssh.protocol -E separator=, -Y "tcp or udp or sctp" | sort | uniq' % (inputFile)
 
 #====================
 
 def makeGraph():
 	listy = [] # connection line list
 	dicty = {} # node label dictionary
+	command = 'tshark -r %s -T fields -e ip.proto -e ip.src -e ip.dst -e http.host -e http.request.method -e http.response.code -e http.response.phrase -e ssl.handshake.extensions_server_name -e ssh.protocol -E separator=, -Y "tcp or udp or sctp" | sort | uniq' % (inputFile)
 	print 'Generating graph.  This may take a few seconds...'
 	for line in os.popen(command):
 		l = line.split(',')
