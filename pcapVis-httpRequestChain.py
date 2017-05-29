@@ -15,12 +15,11 @@ dotOutputFile = str(inputFile+'-chain-dot.png')
 circoOutputFile = str(inputFile+'-chain-circo.png')
 neatoOutputFile = str(inputFile+'-chain-circo.png')
 
-# be cheaty and use tshark to do the heavy lifting
-command = 'tshark -r %s -T fields -e ip.src -e ip.dst -e http.host -e http.request.method -e http.referer -e ssl.handshake.extensions_server_name -Y "http.request or ssl.handshake.extensions_server_name" -E separator=, | sort | uniq' % (inputFile)
-listy = []
-dicty = {}
-
 def makeGraph():
+	listy = []
+	dicty = {}
+	# be cheaty and use tshark to do the heavy lifting
+	command = 'tshark -r %s -T fields -e ip.src -e ip.dst -e http.host -e http.request.method -e http.referer -e ssl.handshake.extensions_server_name -Y "http.request or ssl.handshake.extensions_server_name" -E separator=, | sort | uniq' % (inputFile)
 	print 'Generating graph.  This may take a few seconds...'
 	for line in os.popen(command):
 		l = line.strip('\n').replace('http://', '').replace('https://','').split(',')
