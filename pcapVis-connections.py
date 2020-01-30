@@ -2,6 +2,12 @@
 
 #====================
 # PCAP Force-Directed Graph Maker v1.4
+# 29 Jan 2020 - added quick and dirty tls option for ssl* flags
+# USAGE:
+#	pcapVis-connections.py somefile.pcap
+#	pcapVis-connections.py somefile.pcap tls
+# TODO:  switch to subprocess module, use argparse
+#
 # 19 May 2017
 # Requires Python 2.6+, TShark, and GraphViz
 # v1.3 - fixed dictionary/node label logic
@@ -15,6 +21,11 @@ import os, sys
 #====================
 
 inputFile = sys.argv[1]
+if len(sys.argv) == 3:
+	# need to put a check here
+	tlsflag = True
+else:
+	tlsflag = False
 dotFile = str(inputFile+'-conns.dot')
 dotOutputFile = str(inputFile+'-conns-dot.png')
 circoOutputFile = str(inputFile+'-conns-circo.png')
@@ -25,7 +36,10 @@ neatoOutputFile = str(inputFile+'-conns-neato.png')
 def makeGraph():
 	listy = [] # connection line list
 	dicty = {} # node label dictionary
-	command = 'tshark -r %s -T fields -e ip.proto -e ip.src -e ip.dst -e http.host -e http.request.method -e http.response.code -e http.response.phrase -e ssl.handshake.extensions_server_name -e ssh.protocol -E separator=, -Y "tcp or udp or sctp" | sort | uniq' % (inputFile)
+	if tlsflag:
+		command = 'tshark -r %s -T fields -e ip.proto -e ip.src -e ip.dst -e http.host -e http.request.method -e http.response.code -e http.response.phrase -e tls.handshake.extensions_server_name -e ssh.protocol -E separator=, -Y "tcp or udp or sctp" | sort | uniq' % (inputFile)
+	else:
+		command = 'tshark -r %s -T fields -e ip.proto -e ip.src -e ip.dst -e http.host -e http.request.method -e http.response.code -e http.response.phrase -e ssl.handshake.extensions_server_name -e ssh.protocol -E separator=, -Y "tcp or udp or sctp" | sort | uniq' % (inputFile)
 	print 'Generating graph.  This may take a few seconds...'
 	for line in os.popen(command):
 		l = line.split(',')
@@ -56,6 +70,10 @@ def makeGraph():
 				listy.append('"%s" -> "%s" [label="SSH", color="red", penwidth=3, arrowsize=2]' % (sip, dip))
 				k = sip
 				v = str('(SSH) '+sshy)
+#			else:
+#				listy.append('"%s" -> "%s" [label="TCP", color="black"]' % (sip, dip))
+#				k = dip
+#				v = str('(TCP)')
 		elif proto == 17:
 			listy.append('"%s" -> "%s" [label="UDP", color="orange"]' % (sip, dip))
 		elif proto == 132:
@@ -81,7 +99,9 @@ def makeGraph():
 		# create the graph formatting
 		dotty = str('digraph graph_name { \n\ngraph [\nlabel="%s",\nlabelloc="t",\nlabeljust="c",\nbgcolor="white",\nfontcolor="black",\nfontsize=16,\nmargin=0,\nrankdir=LR,\nsplines=spline,\nranksep=1,\nnodesep=1\n]; \n\nnode [\nstyle="solid,filled",\nfontsize=14,\nfontcolor=black,\nfontname="Arial",\nfillcolor=none,\nfixedsize=false\n]; \n\nedge [\nstyle=solid,\nfontsize=12,\nfontcolor=black,\nfontname="Arial",\ncolor=black\n]\n' % (sys.argv[1]))
 		d.write(dotty)
+###		print(list(set(listy)))
 		for i in list(set(listy)): # implement the unique lines from the list previously created (for the scapy version)
+###			print(i)
 			d.write('\n'+i+';')
 		d.write('\n\n')
 		if dicty:
