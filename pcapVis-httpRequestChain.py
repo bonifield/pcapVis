@@ -3,6 +3,12 @@
 #=============
 # HTTP-link viewer, inspired by URLQuery.net
 # Requires Python 2.6+, GraphViz, and TShark
+# 29 Jan 2020 - added quick and dirty tls option for ssl* flags
+# USAGE:
+#       pcapVis-httpRequestChain.py somefile.pcap
+#       pcapVis-httpRequestChain.py somefile.pcap tls
+# TODO:  switch to subprocess module, use argparse
+#
 # v1.2
 # 19 May 2017
 #=============
@@ -10,6 +16,11 @@
 import os, sys
 
 inputFile = sys.argv[1]
+if len(sys.argv) == 3:
+	# need to put a check here
+	tlsflag = True
+else:
+	tlsflag = False
 dotFile = str(inputFile+'-chain.dot')
 dotOutputFile = str(inputFile+'-chain-dot.png')
 circoOutputFile = str(inputFile+'-chain-circo.png')
@@ -19,7 +30,10 @@ def makeGraph():
 	listy = []
 	dicty = {}
 	# be cheaty and use tshark to do the heavy lifting
-	command = 'tshark -r %s -T fields -e ip.src -e ip.dst -e http.host -e http.request.method -e http.referer -e ssl.handshake.extensions_server_name -Y "http.request or ssl.handshake.extensions_server_name" -E separator=, | sort | uniq' % (inputFile)
+	if tlsflag:
+		command = 'tshark -r %s -T fields -e ip.src -e ip.dst -e http.host -e http.request.method -e http.referer -e tls.handshake.extensions_server_name -Y "http.request or ssl.handshake.extensions_server_name" -E separator=, | sort | uniq' % (inputFile)
+	else:
+		command = 'tshark -r %s -T fields -e ip.src -e ip.dst -e http.host -e http.request.method -e http.referer -e ssl.handshake.extensions_server_name -Y "http.request or ssl.handshake.extensions_server_name" -E separator=, | sort | uniq' % (inputFile)
 	print 'Generating graph.  This may take a few seconds...'
 	for line in os.popen(command):
 		l = line.strip('\n').replace('http://', '').replace('https://','').split(',')
