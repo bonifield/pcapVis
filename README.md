@@ -4,6 +4,14 @@ PCAP Force-Directed Graph Generators
 - Install Requirements: ```sudo apt-get install graphviz tshark -y```
 - Usage:  ```script.py yourfile.pcap```
 
+## Updates
+- 29 Jan 2020
+	- added quick-and dirty tls flag, to convert the ssl.* fields to tls.*
+ 
+## TO DO
+- use argparse and subprocess
+- major code refactoring
+
 ## pcapVis-connections.py
 Produces a basic force-directed link graph that also highlights SSH connections
 ![pcapVis-connections.py](https://github.com/bonifield/pcapVis/blob/master/conn-snippet.PNG)
