@@ -13,6 +13,7 @@ PCAP Force-Directed Graph Generators
 - major code refactoring
 - check if successful before displaying "made xyz" message
 - better output filename
+- perhaps combine into one script...
 
 ## pcapVis-connections.py
 Produces a basic force-directed link graph that also highlights SSH connections
