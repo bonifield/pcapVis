@@ -2,7 +2,7 @@
 PCAP Force-Directed Graph Generators
 - Requires Python 2.6+, GraphViz, and TShark
 - Install Requirements: ```sudo apt-get install graphviz tshark -y```
-- Usage:  ```script.py yourfile.pcap```
+- Usage:  ```script.py yourfile.pcap``` OR ```script.py yourfile.pcap tls```
 
 ## Updates
 - 29 Jan 2020
